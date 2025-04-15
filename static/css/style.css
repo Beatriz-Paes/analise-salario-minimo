@@ -140,6 +140,9 @@ tr:hover {
 
 /* Fonte dos Dados */
 .font-data {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
     width: 90%;
     margin: 40px 0 20px 0;
     text-align: center;
