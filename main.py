@@ -6,22 +6,6 @@ from data_analisys import plot_data
 from data_cleaner import clean_data
 from data_fetcher import fetch_data
 
-
-def main() -> None:
-    """Função principal para coordenar o fluxo do programa."""
-    try:
-        print("\n> Etapa 1: Extração dos Dados...")
-        fetch_data()
-
-        print("\n> Etapa 2: Limpeza dos Dados...")
-        clean_data()
-
-        print("\n> Etapa 3: Geração do Gráfico...")
-        plot_data()
-    except Exception as e:
-        print(f"Erro encontrado durante a execução: {e}")
-
-
 app = Flask(__name__)
 
 
@@ -43,6 +27,22 @@ def home() -> str:
     )
 
 
+def main() -> None:
+    """Função principal para coordenar o fluxo do programa."""
+    try:
+        print("\n> Etapa 1: Extração dos Dados...")
+        fetch_data()
+
+        print("\n> Etapa 2: Limpeza dos Dados...")
+        clean_data()
+
+        print("\n> Etapa 3: Geração do Gráfico...")
+        plot_data()
+    except Exception as e:
+        print(f"Erro encontrado durante a execução: {e}")
+
+
 if __name__ == "__main__":
+    # Executado apenas em ambiente de desenvolvimento local
     main()
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=5000)
