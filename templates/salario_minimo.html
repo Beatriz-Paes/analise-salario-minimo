@@ -1,0 +1,412 @@
+{% extends "base.html" %}
+
+{% block title %}Análise do Salário Mínimo{% endblock %}
+
+{% block content %}
+
+<h1>Fundamentos de Economia: Análise do Salário Mínimo</h1>
+<p class="description">
+    O salário mínimo é um tema central nas discussões econômicas e sociais do Brasil. Ele não apenas reflete a
+    remuneração mínima que um trabalhador deve receber, mas também serve como um indicador importante do poder de compra
+    e do custo de vida no país. Nesta análise, exploraremos a evolução histórica do salário mínimo no Brasil, comparando
+    o valor nominal (oficial) com o valor necessário (ideal) para atender às necessidades básicas de uma pessoa ou
+    família.
+    Através de gráficos e tabelas, examinaremos as variações percentuais anuais, o poder de compra do salário mínimo e
+    as lacunas entre o salário recebido e o necessário. Essa análise nos permitirá entender melhor a dinâmica do
+    mercado de trabalho brasileiro e as implicações sociais e econômicas do salário mínimo.
+    Os dados são divulgados mensalmente pelo Dieese e importantes instrumentos na luta em defesa do poder aquisitivo do
+    trabalhador, principalmente daquele que ganha o salário mínimo.
+</p>
+
+<!-- Primeira Tabela: Dados Brutos -->
+<h2>Tabela de Dados: Salário Mínimo</h2>
+<p class="description">
+    A constituição, promulgada em 5 de outubro de 1988, define o salário mínimo como aquele fixado em lei, nacionalmente
+    unificado, capaz de atender às suas necessidades vitais básicas (do trabalhador) e às de sua família com moradia,
+    alimentação, educação, saúde, lazer, vestuário, higiene, transporte e previdência social, com reajustes periódicos
+    que lhe preservem o poder aquisitivo. (Constituição Federativa do Brasil, art. 7" - IV).
+    Para calcular o Salário Mínimo Necessário, o DIEESE considera o preceito constitucional de que o salário mínimo deve
+    atender as necessidades básicas do trabalhador e de sua família e cujo valor é único para todo o país. Usa como base
+    o Decreto lei nº 399, que estabelece que o gasto com alimentação de um trabalhador adulto não pode ser inferior ao
+    custo da Cesta Básica de Alimentos. A família considerada para o cálculo é composta por 2 adultos e 2 crianças, que
+    por hipótese, consomem como 1 adulto.
+</p>
+<p class="description">
+    A tabela a seguir apresenta os valores históricos do salário mínimo no Brasil, tanto na sua forma nominal (o valor
+    oficial) quanto no seu valor necessário (o montante que deveria ser recebido para atender às necessidades básicas de
+    uma pessoa ou família). Os valores estão organizados por período (mês e ano), e podem ser ordenados e filtrados para
+    facilitar a análise.
+</p>
+<table id="tabela_salario" class="display" style="width:100%; max-width: 1200px;">
+    <thead>
+    <tr>
+        <th>Ano</th>
+        <th>Período</th>
+        <th>Salário Mínimo Nominal</th>
+        <th>Salário Mínimo Necessário</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for row in tabela_salario %}
+    <tr>
+        <td>{{ row["Ano"] }}</td>
+        <td>{{ row["Período"] }}</td>
+        <td>R$ {{ row["Salário Mínimo Nominal"] }}</td>
+        <td>R$ {{ row["Salário Mínimo Necessário"] }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<br>
+<br>
+
+<h2>Gráficos</h2>
+
+<!-- GRÁFICO DA EVOLUÇÃO DO SALÁRIO MÍNIMO -->
+<h3>1. Evolução do Salário Mínimo (Nominal x Necessário)</h3>
+<p class="description">
+    Este gráfico apresenta a evolução histórica do salário mínimo nominal e do salário mínimo necessário ao longo do
+    tempo. O salário nominal reflete o valor oficial determinado pelo governo, enquanto o salário necessário indica o
+    valor ideal calculado com base no custo de uma cesta básica para sustentar uma família, cobrindo despesas como
+    alimentação, habitação, saúde, educação, lazer, transporte e outros. Assim, podemos observar os desvios e lacunas
+    entre o salário recebido e o necessário.
+</p>
+<!--<img src="{{ url_for('static', filename='images/salario_minimo_evolucao.png') }}" alt="Gráfico de Evolução">-->
+<canvas id="graficoEvolucao" style="max-width: 100%; height: auto; margin: 0 auto;" width="800" height="400"></canvas>
+;
+<br>
+
+<!-- GRÁFICO DO CRESCIMENTO PERCENTUAL -->
+<h3>2. Crescimento Percentual do Salário Mínimo ao Longo dos Anos</h3>
+<p class="description">
+    Este gráfico ilustra o crescimento percentual do salário mínimo ao longo dos anos. Ele fornece uma visão clara das
+    flutuações de aumento ano-a-ano no salário nominal, destacando períodos de maior ou menor valorização.
+</p>
+<div class="chart-container">
+    <canvas id="graficoCrescimento"></canvas>
+</div>
+<!--<canvas id="graficoCrescimento" style="max-width: 100%; height: auto; margin: 0 auto;" width="800"-->
+<!--        height="400"></canvas>-->
+<br>
+
+<h3>3. Poder de Compra do Salário Mínimo</h3>
+<p class="description">
+    O gráfico abaixo demonstra o poder de compra do salário mínimo ao longo do tempo, indicando a relação percentual
+    entre o salário nominal e o salário necessário. Quanto maior o poder de compra (em %), mais o salário nominal é
+    capaz de atender às necessidades básicas. Essa métrica é importante para avaliar se os aumentos no salário oficial
+    têm impacto direto na qualidade de vida.
+</p>
+<!--<img src="{{ url_for('static', filename='images/poder_compra.png') }}" alt="Gráfico de Poder de Compra">-->
+<div class="chart-container">
+    <canvas id="graficoPoderCompra"></canvas>
+</div>
+
+
+<!-- Segunda Tabela: Variação Percentual -->
+<h2>Tabela de Variação Percentual do Salário Nominal</h2>
+<p class="description">
+    Esta tabela mostra a variação percentual anual do salário mínimo nominal no Brasil. A análise destaca os períodos em
+    que houve maior ou menor crescimento percentual no valor oficial do salário, permitindo identificar tendências ou
+    estagnação no ajuste salarial ao longo dos anos.
+</p>
+<table id="tabela_crescimento" class="display" style="width:100%; max-width: 1200px;">
+    <thead>
+    <tr>
+        <th>Ano</th>
+        <th>Poder de Compra (%)</th>
+        <th>Salário Mínimo Nominal</th>
+        <th>Crescimento Nominal (%)</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for row in tabela_crescimento %}
+    <!--    Ano,Poder de Compra (%),Salário Mínimo Nominal,Crescimento Nominal (%)-->
+    <tr>
+        <td>{{ row["Ano"] }}</td>
+        <td>{{ row["Poder de Compra (%)"] | round(2) }}</td>
+        <td>R$ {{ row["Salário Mínimo Nominal"] | round(2) }}</td>
+        <td>{{ row["Crescimento Nominal (%)"] | round(2) }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<!-- Inserir os dados nas tabelas e criar os gráficos -->
+<script>
+    $(document).ready(function () {
+        const salarioMinimo = {
+            anos: [],
+            nominal: [],
+            necessario: []
+        };
+
+        const salarioDados = {
+            anos: [],
+            poderCompra: [],
+            crescimentoNominal: [],
+            salarioNominal: []
+        };
+
+
+        // Carregar o salário mínimo tratado
+        $.get('static/tables/salario_minimo_tratado.csv', function (data) {
+            const linhas = data.split('\n');
+            const tbodySalarios = $('#tabelaSalarios tbody');
+            const salarios = [];
+
+            linhas.slice(1).forEach(linha => {
+                const colunas = linha.split(';');
+                const ano = colunas[0];
+                const periodo = colunas[1];
+                const salarioNominal = parseFloat(colunas[2]);
+                const salarioNecessario = parseFloat(colunas[3]);
+
+                if (!ano || !periodo || isNaN(salarioNominal) || isNaN(salarioNecessario)) return;
+
+                salarios.push({ano, periodo, salarioNominal, salarioNecessario});
+            });
+
+            const salariosOrdenados = salarios.reverse();
+
+            salariosOrdenados.forEach(salario => {
+                salarioMinimo.anos.push(`${salario.periodo}/${salario.ano}`);
+                salarioMinimo.nominal.push(salario.salarioNominal);
+                salarioMinimo.necessario.push(salario.salarioNecessario);
+
+                tbodySalarios.append(`
+                    <tr>
+                        <td>${salario.ano}</td>
+                        <td>${salario.periodo}</td>
+                        <td>${salario.salarioNominal}</td>
+                        <td>${salario.salarioNecessario}</td>
+                    </tr>
+                `);
+            });
+
+            $('#tabelaSalarios').DataTable({
+                "language": {"url": "//cdn.datatables.net/plug-ins/1.13.5/i18n/pt-BR.json"},
+                "order": [[0, 'asc']]
+            });
+
+            criarGraficoEvolucao();
+        });
+
+        // Carregar os dados do arquivo combinado
+        $.get('static/tables/poder_de_compra_e_crescimento.csv', function (data) {
+            const linhas = data.split("\n");
+            const tbodyTabela = $('#data-table tbody');
+
+            linhas.slice(1).forEach(linha => {
+                const colunas = linha.split(',');
+                const ano = colunas[0];
+                const poderCompra = parseFloat(colunas[1]);
+                const salarioNominal = parseFloat(colunas[2]);
+                const crescimentoNominal = parseFloat(colunas[3]);
+
+                // Validar dados válidos
+                if (!ano || isNaN(poderCompra) || isNaN(salarioNominal) || isNaN(crescimentoNominal)) {
+                    return;
+                }
+
+                // Adicionar informações nos arrays
+                salarioDados.anos.push(ano);
+                salarioDados.poderCompra.push(poderCompra);
+                salarioDados.salarioNominal.push(salarioNominal);
+                salarioDados.crescimentoNominal.push(crescimentoNominal);
+
+                // Atualizar a tabela com os dados do CSV
+                tbodyTabela.append(`
+                    <tr>
+                        <td>${ano}</td>
+                        <td>${poderCompra.toFixed(2)}%</td>
+                        <td>R$ ${salarioNominal.toFixed(2)}</td>
+                        <td>${crescimentoNominal.toFixed(2)}%</td>
+                    </tr>
+                `);
+            });
+
+            // Inicializar DataTable
+            $('#data-table').DataTable({
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.13.5/i18n/pt-BR.json"
+                }
+            });
+
+            // Criar gráficos
+            criarGraficoPoderCompra();
+            criarGraficoCrescimento();
+        });
+
+
+        // Gráfico de evolução do salário mínimo
+        function criarGraficoEvolucao() {
+            const ctx = document.getElementById('graficoEvolucao').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: salarioMinimo.anos,
+                    datasets: [
+                        {
+                            label: 'Salário Nominal (R$)',
+                            data: salarioMinimo.nominal,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            fill: true,
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Salário Necessário (R$)',
+                            data: salarioMinimo.necessario,
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            fill: true,
+                            tension: 0.1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {display: true, position: 'top'},
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    const value = context.raw;
+                                    return `R$ ${value.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Gráfico de crescimento nominal
+        function criarGraficoCrescimento() {
+            const ctx = document.getElementById('graficoCrescimento').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: salarioDados.anos,
+                    datasets: [
+                        {
+                            label: 'Crescimento Nominal (%)',
+                            data: salarioDados.crescimentoNominal,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {display: true, position: 'top'},
+                        maintainAspectRatio: false,
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    const index = context.dataIndex;
+                                    const variacao = context.raw;
+                                    const salario = salarioDados.salarioNominal[index];
+                                    return [
+                                        `Crescimento: ${variacao.toFixed(2)}%`,
+                                        `Salário Nominal: R$ ${salario.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`
+                                    ];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Ano'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Crescimento Nominal (%)'
+                            },
+                            ticks: {
+                                callback: function (value) {
+                                    return `${value.toFixed(2)}%`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Gráfico de poder de compra
+        function criarGraficoPoderCompra() {
+            const ctx = document.getElementById('graficoPoderCompra').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: salarioDados.anos,
+                    datasets: [
+                        {
+                            label: 'Poder de Compra (%)',
+                            data: salarioDados.poderCompra,
+                            borderColor: 'rgba(52, 152, 219, 1)',
+                            backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 4,
+                            pointBackgroundColor: 'rgba(41, 128, 185, 1)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {display: true, position: 'top'},
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    const index = context.dataIndex;
+                                    const ano = salarioDados.anos[index];
+                                    const valor = context.raw;
+                                    const salario = salarioDados.salarioNominal[index];
+                                    return [
+                                        `Ano: ${ano}`,
+                                        `Poder de Compra: ${valor.toFixed(1)}%`,
+                                        `Salário Nominal: R$ ${salario.toFixed(2)}`
+                                    ];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {title: {display: true, text: 'Ano'}},
+                        y: {title: {display: true, text: 'Poder de Compra (%)'}}
+                    }
+                }
+            });
+        }
+    });
+</script>
+
+<!-- DataTables Config -->
+<script>
+    $(document).ready(function () {
+        $('#tabela_salario').DataTable({
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json"
+            },
+            "order": [[0, "desc"]],
+        });
+
+        $('#tabela_crescimento').DataTable({
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json"
+            },
+            "order": [[0, "desc"]],
+        });
+    });
+</script>
+{% endblock %}

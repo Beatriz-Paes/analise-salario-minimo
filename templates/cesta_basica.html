@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block title %}Consulta e Análise da Cesta Básica{% endblock %}
+{% block extra_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cesta_basica.css') }}">
+{% endblock %}
+{% block content %}
+<h1>Consulta e Análise da Cesta Básica</h1>
+
+<!-- Formulário de Consulta -->
+<form method="POST" action="/cesta">
+    <label for="cidade">Selecione a Cidade:</label>
+    <select name="cidade" id="cidade">
+        <option value="0">Todas as cidades</option>
+        <option value="16">(09/1995) Aracaju</option>
+        <option value="13">(08/1987) Belém</option>
+        <option value="2">(09/1979) Belo Horizonte</option>
+        <option value="22">(01/2016) Boa Vista</option>
+        <option value="9">(01/1986) Brasília</option>
+        <option value="19">(11/2012) Campo Grande</option>
+        <option value="25">(01/2016) Cuiabá</option>
+        <option value="4">(06/1983) Curitiba</option>
+        <option value="1">(05/1985) Florianópolis</option>
+        <option value="11">(09/1986) Fortaleza</option>
+        <option value="10">(12/1994) Goiânia</option>
+        <option value="3">(07/1988) João Pessoa</option>
+        <option value="18">(10/2012) Macaé</option>
+        <option value="21">(01/2016) Macapá</option>
+        <option value="28">(01/2016) Maceió</option>
+        <option value="17">(09/2008) Manaus</option>
+        <option value="15">(02/1991) Natal</option>
+        <option value="26">(01/2016) Palmas</option>
+        <option value="5">(01/1977) Porto Alegre</option>
+        <option value="23">(01/2016) Porto Velho</option>
+        <option value="12">(02/1987) Recife</option>
+        <option value="20">(01/2016) Rio Branco</option>
+        <option value="6">(01/1983) Rio de Janeiro</option>
+        <option value="7">(04/1983) Salvador</option>
+        <option value="27">(01/2016) São Luís</option>
+        <option value="8" selected>(01/1959) São Paulo</option>
+        <option value="24">(01/2016) Teresina</option>
+        <option value="14">(10/1988) Vitória</option>
+    </select>
+    <label for="data_inicial">Data Inicial (MMAAAA):</label>
+    <input type="text" name="data_inicial" id="data_inicial" placeholder="Ex: 012023" required/>
+
+    <label for="data_final">Data Final (MMAAAA):</label>
+    <input type="text" name="data_final" id="data_final" placeholder="Ex: 102023" required/>
+
+    <button type="submit">Consultar</button>
+</form>
+
+{% if tabela_cesta %}
+<!-- Resultados da Consulta -->
+<h2>Resultados da Análise</h2>
+<p>Veja abaixo a análise detalhada dos custos relacionados à cesta básica no período selecionado.</p>
+
+<!-- Tabela de Resultados -->
+
+<p class="description">
+    A tabela abaixo apresenta os custos mensais da cesta básica em diferentes cidades, organizados por data.
+    Este conjunto de dados permite acompanhar a evolução dos preços ao longo do tempo e identificar variações
+    no custo da cesta de alimentos em localidades específicas do país. É uma ferramenta útil para analisar
+    o impacto da inflação e avaliar as desigualdades regionais nos preços dos itens essenciais.
+</p>
+<br>
+
+<table id="cesta-basica-tabela" class="display" style="width:100%; max-width: 1200px;">
+    <thead>
+    <tr>
+        <th>Data</th>
+        <th>Cidade</th>
+        <th>Custo da Cesta (R$)</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for linha in tabela_cesta %}
+    <tr>
+        <td>{{ linha["Data"] }}</td>
+        <td>{{ linha["Cidade"] }}</td>
+        <td>{{ "%.2f"|format(linha["Custo da Cesta (R$)"]) }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<br>
+<br>
+
+<!-- Gráficos -->
+
+<!-- GRÁFICO 1: CUSTO DA CESTA BÁSICA POR REGIÃO -->
+<h3>1. Custo da Cesta Básica na Região Selecionada</h3>
+<p class="description">
+    Este gráfico ilustra o custo mensal da cesta básica em diferentes regiões do Brasil, conforme selecionado. A análise permite
+    observar disparidades nos preços dos itens essenciais entre locais distintos, considerando fatores como logística, 
+    produção e economia local.
+</p>
+<br>
+
+<div class="chart-container">
+    <canvas id="grafico-cesta-basica"></canvas>
+</div>
+
+<script>
+    // Embed the tabela_cesta JSON from Flask backend and parse it into a JavaScript object
+    const tabelaCesta = JSON.parse('{{ tabela_cesta | tojson | safe }}');
+
+    // Generate chart labels and data arrays from the tabelaCesta JSON object
+    const labels = tabelaCesta.map(row => row['Data']);
+    const data = tabelaCesta.map(row => row['Custo da Cesta (R$)']);
+
+    // Initialize the chart
+    initializeChart('grafico-cesta-basica', labels, data);
+
+    /**
+     * Function to initialize a Chart.js line chart
+     * @param {string} chartElementId - The ID of the canvas element for the chart
+     * @param {string[]} labels - The array of labels for the x-axis
+     * @param {number[]} data - The array of data points for the chart
+     */
+    function initializeChart(chartElementId, labels, data) {
+        const ctx = document.getElementById(chartElementId).getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Custo da Cesta Básica (R$)',
+                    data: data,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {display: true},
+                    tooltip: {mode: 'index', intersect: false}
+                },
+                scales: {
+                    x: {display: true, title: {display: true, text: 'Data'}},
+                    y: {display: true, title: {display: true, text: 'Custo (R$)'}}
+                }
+            }
+        });
+    }
+</script>
+{% else %}
+<br>
+<p>Preencha os campos acima e clique em "Consultar" para ver os resultados.</p>
+{% endif %}
+
+<!-- DataTables Config -->
+<script>
+    $(document).ready(function () {
+        $('#cesta-basica-tabela').DataTable({
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json"
+            },
+            "order": [[0, "desc"]],
+        });
+    });
+</script>
+{% endblock %}

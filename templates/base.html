@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistema de Análise de Dados{% endblock %}</title>
+
+    <!-- arquivo CSS externo -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+
+    <!-- External Libraries -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    {% block extra_styles %}{% endblock %}
+</head>
+<body>
+
+<!-- Navigation Menu -->
+<nav class="menu">
+    <a href="/">Início</a>
+    <a href="/salario_minimo">Análise de Salário Mínimo</a>
+    <a href="/cesta">Análise da Cesta Básica</a>
+</nav>
+
+<!-- Page Content -->
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<!-- Fonte dos Dados -->
+<div class="font-data">
+    <p><strong>Fonte dos dados:</strong>
+        <a href="{{ fonte_dados.link }}" target="_blank">
+            {{ fonte_dados.nome }}
+        </a>
+    </p>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-logo">
+        <a href="/">
+            <img alt="Logo" src="/static/images/logo.png">
+        </a>
+    </div>
+    <div class="social-icons">
+        <a href="https://www.linkedin.com/in/beatriz-paes/" target="_blank">
+            <i class="fab fa-linkedin"></i>
+        </a>
+        <a href="https://github.com/Beatriz-Paes/" target="_blank">
+            <i class="fab fa-github"></i>
+        </a>
+    </div>
+</footer>
+
+</body>
+</html>

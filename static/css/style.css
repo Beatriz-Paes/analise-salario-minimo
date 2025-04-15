@@ -1,0 +1,327 @@
+/* General Body Styles */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background: #e0f7fa;
+    /*overflow-x: hidden;*/
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1200px;
+    width: 100%;
+    padding: 0 20px; /* Adiciona um pequeno espaçamento lateral */
+    box-sizing: border-box; /* Garante que o padding não afete a largura total */
+}
+
+/* Typography */
+h1, h2, h3, p {
+    margin: 10px 0;
+    max-width: 800px;
+    text-align: justify;
+    line-height: 1.6;
+    color: #333;
+    margin-left: auto; /* Centraliza horizontalmente os textos */
+    margin-right: auto;
+}
+
+h1 {
+    font-size: 2.2em;
+    color: #444;
+}
+
+h2 {
+    font-size: 1.8em;
+    color: #555;
+}
+
+h3 {
+    font-size: 1.6em;
+    color: #666;
+}
+
+/* Table Styles */
+table {
+    margin: 0 auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    width: 90%; /* Configuração de tamanho máxima para responsividade */
+    max-width: 1200px;
+}
+
+thead {
+    background-color: #eceff4;
+    color: #444;
+}
+
+th, td {
+    padding: 12px 20px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f4f7;
+}
+
+.dataTables_wrapper .dataTable {
+    margin: 20px 0;
+}
+
+.dataTables_length {
+    margin-bottom: 15px;
+}
+
+.dataTables_filter {
+    margin-bottom: 15px;
+}
+
+/* Configurações para gráficos */
+.chart-container {
+    position: relative; /* Necessário para o aspecto responsivo */
+    width: 100%; /* Gráficos ocuparão o espaço como 100% */
+    height: auto; /* Define altura automática */
+    max-width: 1200px; /* Define um limite máximo para o gráfico */
+    margin: 20px auto; /* Centraliza o gráfico na página */
+}
+
+/* Navigation Menu */
+.menu {
+    width: 100%;
+    background-color: #333; /* Fundo escuro igual ao footer */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 0;
+    box-sizing: border-box;
+    color: white;
+    /*box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);*/
+    gap: 15px;
+}
+
+.menu a {
+    text-decoration: none;
+    padding: 10px 20px;
+    /*background-color: #444;*/
+    color: white;
+    border-radius: 5px;
+    font-size: 1em;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.menu a:hover {
+    background-color: #555;
+    transform: scale(1.05);
+}
+
+.menu a:active {
+    background-color: #666;
+}
+
+
+/* Fonte dos Dados */
+.font-data {
+    margin: 40px 0 20px 0;
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+}
+
+.font-data a {
+    text-decoration: none;
+    color: #0066cc;
+}
+
+.font-data a:hover {
+    text-decoration: underline;
+}
+
+/* Footer */
+footer {
+    width: 100%;
+    height: 60px;
+    background-color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    color: white;
+    margin-top: auto;
+    box-sizing: border-box;
+}
+
+footer .social-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+footer .social-icons a {
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: white;
+    color: #1b0126;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+footer .social-icons a i {
+    font-size: 20px;
+}
+
+footer .social-icons a:hover {
+    transform: scale(1.1);
+    background-color: #ccc;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+}
+
+.footer-logo img {
+    width: 100px;
+    height: auto;
+}
+
+
+/* Estilização dos Cards */
+.card-container {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 2rem auto;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 1200px; /* Responsivo */
+}
+
+.card {
+    background-color: #ffffff;
+    border-left: 5px solid #5c9ad9; /* Destaque em azul suave */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    padding: 1.5rem;
+    width: 280px;
+    text-align: left;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    border-color: #4791c5; /* Azul um pouco mais escuro no hover */
+}
+
+.card h3 {
+    font-size: 1.2em;
+    color: #3b505a; /* Cinza escuro para o título */
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+}
+
+.card p {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #5c9ad9; /* Azul suave */
+    margin: 0;
+}
+
+/* Links Diretos */
+.analysis-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin: 2rem 0;
+    width: 100%;
+}
+
+.analysis-links .button {
+    background-color: #5c9ad9; /* Azul claro */
+    color: #ffffff;
+    text-decoration: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    font-size: 1em;
+    font-weight: bold;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.analysis-links .button:hover {
+    background-color: #4791c5; /* Azul um pouco mais escuro no hover */
+    transform: scale(1.02);
+}
+
+/* Sobre o Projeto */
+.about {
+    background-color: #f7fafc; /* Fundo cinza claro */
+    border-left: 5px solid #5c9ad9; /* Azul suave para a borda */
+    border-radius: 8px;
+    padding: 2rem;
+    margin: 2rem auto;
+    width: 100%;
+    max-width: 800px; /* Adiciona limite máximo */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    text-align: justify;
+    box-sizing: border-box; /* Garante que o padding não ultrapasse a largura */
+}
+
+.about h2 {
+    text-align: center;
+    font-size: 1.8em;
+    color: #3b505a; /* Cinza escuro */
+    margin-bottom: 1rem;
+}
+
+.about p {
+    color: #555; /* Cinza um pouco mais escuro */
+    line-height: 1.6;
+}
+
+/* Citação Motivacional */
+blockquote {
+    margin: 2rem auto;
+    padding: 1rem 2rem;
+    font-size: 1.2em;
+    font-style: italic;
+    text-align: center;
+    background-color: #eef5f9; /* Azul muito claro */
+    border-left: 5px solid #5c9ad9; /* Azul suave */
+    border-radius: 5px;
+    max-width: 600px;
+    color: #3b505a; /* Cinza escuro */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.07);
+}
+
+/* Gráficos Responsivos */
+.chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+    margin: 20px auto;
+}

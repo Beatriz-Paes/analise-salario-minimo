@@ -1,31 +1,21 @@
 """Código para análise de dados do salário mínimo no Brasil."""
+from datetime import datetime, timedelta
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 from matplotlib.ticker import FuncFormatter
 
-# Mapeamento de meses do português para inglês
-MESES_MAPA = {
-    "Janeiro": "January",
-    "Fevereiro": "February",
-    "Março": "March",
-    "Abril": "April",
-    "Maio": "May",
-    "Junho": "June",
-    "Julho": "July",
-    "Agosto": "August",
-    "Setembro": "September",
-    "Outubro": "October",
-    "Novembro": "November",
-    "Dezembro": "December",
-}
+from config import CIDADE_MAP, DADOS_UTEIS, MESES_MAP, SALARIO_MINIMO_FILE
+from data_cleaner import clean_cesta_basica
+from data_fetcher import fetch_cesta_basica
 
 
 def carregar_e_preparar_dados() -> pd.DataFrame:
     """Carrega e prepara os dados necessários."""
     df = pd.read_csv("static/tables/salario_minimo_tratado.csv", sep=";")
 
-    df["Período"] = df["Período"].map(MESES_MAPA)
+    df["Período"] = df["Período"].map(MESES_MAP)
 
     df["Data"] = df["Período"] + " " + df["Ano"].astype(str)
     df["Data"] = pd.to_datetime(df["Data"], format="%B %Y", errors="coerce")
@@ -122,6 +112,58 @@ def grafico_poder_compra_e_variacoes(df: pd.DataFrame) -> None:
     plt.savefig("static/images/poder_compra.png")
     print("Gráfico salvo como 'static/images/poder_compra.png'.")
     plt.close()
+
+
+def processar_dados_economicos(cidade_padrao: int = 8) -> dict:
+    """Processa os dados do salário mínimo e da cesta básica para retornar informações importantes.
+
+    Args:
+        cidade_padrao (int): ID padrão da cidade para calcular a média da cesta básica.
+
+    Returns:
+        dict: Dados processados, incluindo salário nominal, salário necessário e custo médio da cesta básica.
+    """
+    # Carregar dados do salário mínimo
+    salario_data = pd.read_csv(SALARIO_MINIMO_FILE, sep=";")
+
+    # Obter os valores mais recentes de salário
+    ultimo_registro = salario_data.iloc[1]  # Considerando que o mais recente está no final do arquivo
+    salario_nominal_atual = ultimo_registro["Salário Mínimo Nominal"]
+    salario_necessario_atual = ultimo_registro["Salário Mínimo Necessário"]
+
+    # Cálculo dos últimos 12 meses
+    data_final = datetime.now()
+    data_inicial = data_final - timedelta(days=365)  # Aproximando 12 meses para 365 dias
+    mes_inicial = f"{data_inicial.month:02d}"
+    ano_inicial = data_inicial.year
+    mes_final = f"{data_final.month:02d}"
+    ano_final = data_final.year
+
+    # Buscar e limpar os dados da cesta básica no intervalo de 12 meses
+    cesta_basica = clean_cesta_basica(
+        fetch_cesta_basica(
+            cidade_padrao,
+            f"{mes_inicial}{ano_inicial}",  # Data inicial no formato MMAAAA
+            f"{mes_final}{ano_final}",  # Data final no formato MMAAAA
+        )
+    )
+
+    cesta_filtrada = cesta_basica[cesta_basica["Cidade"] == CIDADE_MAP[cidade_padrao]]
+    cesta_filtrada["Custo da Cesta (R$)"] = pd.to_numeric(cesta_filtrada["Custo da Cesta (R$)"], errors="coerce")
+    custo_cesta_basica_media = cesta_filtrada["Custo da Cesta (R$)"].mean()
+
+    # Consolidar os dados processados
+    dados_resumo = {
+        "salario_nominal_atual": round(salario_nominal_atual, 2),
+        "salario_necessario_atual": round(salario_necessario_atual, 2),
+        "custo_cesta_basica_media": round(custo_cesta_basica_media, 2),
+    }
+
+    # Salvar em um arquivo
+    df_dados_resumo = pd.DataFrame([dados_resumo])
+    df_dados_resumo.to_csv(DADOS_UTEIS, index=False)
+
+    return dados_resumo
 
 
 def plot_data() -> None:
